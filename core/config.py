@@ -23,6 +23,8 @@ class Settings(BaseSettings):
     MARIADB_URL: str = (f'mariadb+pymysql://{MARIADB_USERNAME}:{MARIADB_PASSWORD}@{MARIADB_HOST}:{MARIADB_PORT}'
                         f'/{MARIADB_DATABASE}?charset=utf8mb4')
 
+    AUTH_KEY: str = os.getenv('AUTH_KEY')
+
     class Config:
         case_sensitive = True
 
