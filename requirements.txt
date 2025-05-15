@@ -6,3 +6,8 @@ gunicorn==23.0.0
 uvicorn==0.32.1
 sqlalchemy==2.0.40
 pymysql==1.1.1
+transformers==4.51.3
+huggingface==0.0.1
+torch==2.7.0
+torchaudio==2.7.0
+torchvision==0.22.0

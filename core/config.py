@@ -24,6 +24,7 @@ class Settings(BaseSettings):
                         f'/{MARIADB_DATABASE}?charset=utf8mb4')
 
     AUTH_KEY: str = os.getenv('AUTH_KEY')
+    HUGGINGFACE_KEY: str = os.getenv('HUGGINGFACE_KEY')
 
     class Config:
         case_sensitive = True

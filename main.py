@@ -6,6 +6,8 @@ from api.v1.api import router as router_v1
 from core.config import settings
 from core.logger import logger
 
+from session.model_session import load_model
+
 from middleware.logging_middleware import LoggingMiddleware
 from middleware.auth_middleware import AuthMiddleware
 from fastapi.middleware.cors import CORSMiddleware
@@ -21,6 +23,7 @@ async def default_error_handler(_: Request, exception: Exception) -> JSONRespons
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    load_model()
     logger.info("Application startup completed.")
     # logger.info(settings.FASTAPI_ENV)
     # logger.debug(logger.handlers)
