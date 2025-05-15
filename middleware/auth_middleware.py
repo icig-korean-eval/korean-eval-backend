@@ -15,7 +15,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
 
         token = auth_header.split(" ", 1)[1]
         # 토큰 검증
-        if token == settings.AUTH_KEY:
+        if token != settings.AUTH_KEY:
             return JSONResponse(status_code=403, content={"detail": "Forbidden: Invalid API key"})
 
         # 통과된 요청만 다음 단계로

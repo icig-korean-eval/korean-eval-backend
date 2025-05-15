@@ -8,13 +8,13 @@ from transformers import (
 from core.config import settings
 
 
-_model_asr = None
-_model_ipa_announcer = None
-_model_ipa_normal = None
+_model_asr: WhisperForConditionalGeneration | None = None
+_model_ipa_announcer: Wav2Vec2ForCTC | None = None
+_model_ipa_normal: Wav2Vec2ForCTC | None = None
 
-_preprocessor_asr = None
-_preprocessor_ipa_announcer = None
-_preprocessor_ipa_normal = None
+_preprocessor_asr: WhisperProcessor | None = None
+_preprocessor_ipa_announcer: Wav2Vec2Processor | None = None
+_preprocessor_ipa_normal: Wav2Vec2Processor | None = None
 
 def load_model():
     global _model_asr, _preprocessor_asr,\
@@ -31,24 +31,27 @@ def load_model():
             language="Korean",
             task="transcribe"
         )
-        _model_ipa_announcer = Wav2Vec2Processor.from_pretrained(
+        _model_ipa_announcer = Wav2Vec2ForCTC.from_pretrained(
             'icig/announcer-korean-ipa-translation',
             token=settings.HUGGINGFACE_KEY
         )
-        _preprocessor_ipa_announcer = Wav2Vec2ForCTC.from_pretrained(
+        _preprocessor_ipa_announcer = Wav2Vec2Processor.from_pretrained(
             'icig/announcer-korean-ipa-translation',
             token=settings.HUGGINGFACE_KEY
         )
-        _model_ipa_normal = Wav2Vec2Processor.from_pretrained(
+        _model_ipa_normal = Wav2Vec2ForCTC.from_pretrained(
             'icig/normal-korean-ipa-translation',
             token=settings.HUGGINGFACE_KEY
         )
-        _preprocessor_ipa_normal = Wav2Vec2ForCTC.from_pretrained(
+        _preprocessor_ipa_normal = Wav2Vec2Processor.from_pretrained(
             'icig/normal-korean-ipa-translation',
             token=settings.HUGGINGFACE_KEY
         )
 
-def get_asr_model():
+def get_asr_model() -> tuple[
+    WhisperForConditionalGeneration | WhisperForConditionalGeneration | None,
+    WhisperProcessor | None
+]:
     return _model_asr, _preprocessor_asr
 
 def get_ipa_announcer_model():
