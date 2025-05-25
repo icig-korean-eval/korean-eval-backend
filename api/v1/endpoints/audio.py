@@ -267,3 +267,41 @@ async def chat_conversation(
         "reply": assistant_reply,
         'feedback': json.loads(feedback_reply)
     }
+
+
+@router.get("/chat/rooms", response_model=List[schema.ChatRoom])
+async def get_all_chat_rooms():
+    async with aiosqlite.connect(settings.DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+
+        async with db.execute("SELECT * FROM chat_room ORDER BY created_at DESC") as cursor:
+            rows = await cursor.fetchall()
+
+        return [schema.ChatRoom(**dict(row)) for row in rows]
+
+
+@router.get("/chat/{chat_id}/history", response_model=List[schema.ChatMessage])
+async def get_chat_history(chat_id: str):
+    async with aiosqlite.connect(settings.DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+
+        query = """
+                    SELECT * FROM chat_history
+                    WHERE chat_id = ?
+                      AND role != 'system'
+                    ORDER BY timestamp ASC, 
+                             CASE role
+                                 WHEN 'user' THEN 0
+                                 ELSE 1
+                             END
+                """
+        async with db.execute(
+            query,
+            (chat_id,)
+        ) as cursor:
+            rows = await cursor.fetchall()
+
+        if not rows:
+            raise HTTPException(status_code=404, detail="Chat history not found")
+
+        return [schema.ChatMessage(**dict(row)) for row in rows]

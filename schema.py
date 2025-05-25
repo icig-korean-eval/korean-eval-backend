@@ -61,3 +61,18 @@ class Feedback(BaseModel):
 class ConversationFeedback(BaseModel):
     reply: str
     feedback: Feedback
+
+
+class ChatRoom(BaseModel):
+    chat_id: str
+    title: str
+    situation: str
+    created_at: datetime
+
+
+class ChatMessage(BaseModel):
+    id: int
+    chat_id: str
+    timestamp: datetime
+    role: str
+    content: str
