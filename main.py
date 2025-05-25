@@ -8,6 +8,8 @@ from core.logger import logger
 
 from session.model_session import load_model
 
+import sqlite3
+
 from middleware.logging_middleware import LoggingMiddleware
 from middleware.auth_middleware import AuthMiddleware
 from fastapi.middleware.cors import CORSMiddleware
@@ -24,6 +26,29 @@ async def default_error_handler(_: Request, exception: Exception) -> JSONRespons
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     load_model()
+
+    conn = sqlite3.connect(settings.DB_PATH)
+    c = conn.cursor()
+    c.execute("""
+    CREATE TABLE IF NOT EXISTS chat_history (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        chat_id TEXT,
+        timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+        role TEXT,
+        content TEXT
+    )
+    """)
+    c.execute("""
+    CREATE TABLE IF NOT EXISTS chat_room (
+        chat_id TEXT PRIMARY KEY,
+        title TEXT,
+        situation TEXT,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+    """)
+    conn.commit()
+    conn.close()
+
     logger.info("Application startup completed.")
     # logger.info(settings.FASTAPI_ENV)
     # logger.debug(logger.handlers)

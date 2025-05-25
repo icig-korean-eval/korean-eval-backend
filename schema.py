@@ -28,3 +28,17 @@ class IpaResult(BaseModel):
     words: Dict[int, WordData]
     result: str
     result_array: List[str]
+
+class ChatPost(BaseModel):
+    chat_id: str
+    message: str
+
+class ChatCreate(BaseModel):
+    situation: str
+
+class ChatCreateResponse(BaseModel):
+    chat_id: str
+
+class ChatPostResponse(BaseModel):
+    reply: str
+    feedback: Any

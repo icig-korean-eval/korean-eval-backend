@@ -25,6 +25,9 @@ class Settings(BaseSettings):
 
     AUTH_KEY: str = os.getenv('AUTH_KEY')
     HUGGINGFACE_KEY: str = os.getenv('HUGGINGFACE_KEY')
+    OLLAMA_KEY: str = os.getenv('OLLAMA_KEY')
+
+    DB_PATH: str = './chat.db'
 
     class Config:
         case_sensitive = True
