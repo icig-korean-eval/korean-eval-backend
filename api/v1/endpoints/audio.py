@@ -230,7 +230,7 @@ def extract_response(text: str) -> str:
     return match.group(1).strip() if match else ""
 
 
-@router.post('/chat/conversation', response_model=schema.ChatPostResponse)
+@router.post('/chat/conversation', response_model=schema.ConversationFeedback)
 async def chat_conversation(
     request: schema.ChatPost
 ):

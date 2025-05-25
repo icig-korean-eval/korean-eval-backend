@@ -42,3 +42,22 @@ class ChatCreateResponse(BaseModel):
 class ChatPostResponse(BaseModel):
     reply: str
     feedback: Any
+
+
+class GrammaticalError(BaseModel):
+    incorrect_part: str = Field(alias="Incorrect part")
+    corrected_version: str = Field(alias="Corrected version")
+    reason: str = Field(alias="Reason")
+
+class BetterExpression(BaseModel):
+    original_part: str = Field(alias="Original part")
+    suggestion: str = Field(alias="Suggestion")
+    reason: str = Field(alias="Reason")
+
+class Feedback(BaseModel):
+    grammatical_errors: List[GrammaticalError]
+    better_expressions: List[BetterExpression]
+
+class ConversationFeedback(BaseModel):
+    reply: str
+    feedback: Feedback
