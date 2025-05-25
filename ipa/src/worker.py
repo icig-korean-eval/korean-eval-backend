@@ -58,7 +58,7 @@ def sanitize(word: str) -> str:
     if len(hanja_idx) == 0:  # if no hanja, no sanitize
         return word
 
-    from src.hanja_tools import hanja_cleaner  # import hanja_cleaner only when needed
+    from ipa.src.hanja_tools import hanja_cleaner  # import hanja_cleaner only when needed
     r = hanja_cleaner(word, hanja_idx)
     return r
 
