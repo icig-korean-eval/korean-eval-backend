@@ -113,7 +113,7 @@ async def query_ollama(history: list[dict]):
                 "Authorization": f"Bearer {settings.OLLAMA_KEY}"
             },
             json={
-                "model": "gemma3:12b",
+                "model": "gemma3:27b",
                 "messages": history,
                 "stream": False
             }
@@ -133,7 +133,7 @@ async def query_ollama_feedback(message: str, situation: str):
                 "Authorization": f"Bearer {settings.OLLAMA_KEY}"
             },
             json={
-                "model": "gemma3:12b",
+                "model": "gemma3:27b",
                 "prompt": f'You are a native Korean teaching Korean to foreigners. The user is a Korean learner. Given the situation: \'{situation}\' and the user\'s sentence: \'{message}\', return a JSON object with exactly two keys: "grammatical_errors" and "better_expressions". Each must be a list of 0–3 strings. Grammar items must state the incorrect part, correction, and reason. Expression items must show the original and a better alternative. Output only valid plain JSON with no markdown, no explanation, and absolutely no code block or ```json tags. The output must be directly parsable using Python\'s json.loads(). Example: {{"grammatical_errors": [{{"Incorrect part": "갔습니다","Corrected version": "갔어요". "Reason": "\'갔습니다\' is too formal in this context."}}], "better_expressions": [{{"Original part": "기분이 나쁘지 않아요", "Suggestion": "기분이 좋아요", "Reason": "More natural and concise."}}]}}',
                 "stream": False
             }
@@ -153,7 +153,7 @@ async def query_ollama_title(situation: str):
                 "Authorization": f"Bearer {settings.OLLAMA_KEY}"
             },
             json={
-                "model": "gemma3:12b",
+                "model": "gemma3:27b",
                 "prompt": f'Given a description of a situation, generate a short and meaningful chat room title that summarizes the situation in 20 characters or fewer (including spaces and punctuation). Only output the title sentence. Do not include any explanation, formatting, or additional text. The title must always be in English. Situation: {situation}',
                 "stream": False
             }
