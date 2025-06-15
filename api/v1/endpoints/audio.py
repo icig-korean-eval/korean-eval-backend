@@ -316,7 +316,7 @@ async def get_chat_room_info(chat_id: str):
 
 
 @router.get("/chat/{chat_id}/history", response_model=List[schema.ChatMessage])
-async def get_chat_history(chat_id: str):
+async def get_chat_history_api(chat_id: str):
     async with aiosqlite.connect(settings.DB_PATH) as db:
         db.row_factory = aiosqlite.Row
 
