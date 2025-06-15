@@ -192,7 +192,7 @@ async def save_message(chat_id: str, role: str, content: str):
         await db.commit()
 
 
-@router.post('/chat', response_model=schema.ChatCreateResponse)
+@router.post('/chat', response_model=schema.ChatRoom)
 async def chat_create(
     request: schema.ChatCreate
 ):
@@ -222,7 +222,21 @@ async def chat_create(
         )
         await db.commit()
 
-    return {"chat_id": chat_id}
+        async with db.execute(
+                "SELECT * FROM chat_room WHERE chat_id = ?",
+                (chat_id,)
+        ) as cursor:
+            row = await cursor.fetchone()
+
+    if not row:
+        # 이론상 발생 안 하지만, 혹시를 대비해
+        raise HTTPException(status_code=500, detail="Failed to retrieve created chat room")
+    return schema.ChatRoom(**{
+        'chat_id': row[0],
+        'title': row[1],
+        'situation': row[2],
+        'created_at': row[3],
+    })
 
 
 def extract_response(text: str) -> str:
@@ -278,6 +292,27 @@ async def get_all_chat_rooms():
             rows = await cursor.fetchall()
 
         return [schema.ChatRoom(**dict(row)) for row in rows]
+
+
+@router.get("/chat/{chat_id}", response_model=schema.ChatRoom)
+async def get_chat_room_info(chat_id: str):
+    async with aiosqlite.connect(settings.DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+
+        async with db.execute(
+            "SELECT * FROM chat_room WHERE chat_id = ?",
+            (chat_id,)
+        ) as cursor:
+            row = await cursor.fetchone()
+
+    if row:
+        return schema.ChatRoom(**{
+            'chat_id': row[0],
+            'title': row[1],
+            'situation': row[2],
+            'created_at': row[3],
+        })
+    return None
 
 
 @router.get("/chat/{chat_id}/history", response_model=List[schema.ChatMessage])
