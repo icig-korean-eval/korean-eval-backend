@@ -315,6 +315,35 @@ async def get_chat_room_info(chat_id: str):
     return None
 
 
+@router.delete("/chat/{chat_id}")
+async def remove_chat_room(chat_id: str):
+    async with aiosqlite.connect(settings.DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+
+        # 1) 먼저 삭제할 행을 조회
+        async with db.execute(
+            "SELECT * FROM chat_room WHERE chat_id = ?",
+            (chat_id,)
+        ) as cursor:
+            row = await cursor.fetchone()
+
+        if not row:
+            # 해당 chat_id가 없으면 404
+            raise HTTPException(status_code=404, detail="Chat room not found")
+
+        # 2) 실제로 DELETE 실행
+        await db.execute(
+            "DELETE FROM chat_history WHERE chat_id = ?",
+            (chat_id,)
+        )
+
+        await db.execute(
+            "DELETE FROM chat_room WHERE chat_id = ?",
+            (chat_id,)
+        )
+        await db.commit()
+
+
 @router.get("/chat/{chat_id}/history", response_model=List[schema.ChatMessage])
 async def get_chat_history_api(chat_id: str):
     async with aiosqlite.connect(settings.DB_PATH) as db:
