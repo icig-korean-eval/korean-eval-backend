@@ -1,20 +1,21 @@
-# 외국인 대상 한국어 학습 프로그램 RestAPI 서버
-
-- 사용자에게 모델을 제공하기 위한 RestAPI 서버
-- 파인튜닝한 모델을 서빙
-  - [외국인 한국어 발화 ASR 모델](https://huggingface.co/icig/non-native-korean-speech-asr)
-  - [표준어 발화 IPA ASR 모델](https://huggingface.co/icig/normal-korean-ipa-translation)
-  - [아나운서 발화 IPA ASR 모델](https://huggingface.co/icig/announcer-korean-ipa-translation)
+# REST API Server for Korean Language Learning Program for Foreigners
 
 
-## 아키택쳐
+- REST API server to provide models to users
+- Serving fine-tuned models:
+  - [Non-native Korean Speech ASR Model](https://huggingface.co/icig/non-native-korean-speech-asr)
+  - [Standard Korean IPA ASR Model](https://huggingface.co/icig/normal-korean-ipa-translation)
+  - [Announcer Korean IPA ASR Model](https://huggingface.co/icig/announcer-korean-ipa-translation)
 
-- Backend: FastAPI
-- DB: Sqlite
+  
+## Architecture
+
+- Backend: FastAPI  
+- Database: SQLite  
 - Deployment: Docker
 
 
-## 프로젝트 구조
+## Project Structure
 
 ```text
 .
@@ -36,23 +37,22 @@
 └── schema.py
 ```
 
-- `api/v1/`: 
-  RestAPI를 구현하는 패키지
-  - `endpoints/audio.py`: 음성인식 관련 api를 구현
-  - `api.py`: api router로 구현한 함수를 api 경로와 매칭
-- `core/`: FastAPI 핵심 설정
-  - `config.py`: FastAPI의 기본적인 설정
-  - `logger.py`: api 호출-응답 로거
-- `ipa/`: IPA 변환 api를 위한 패키지
-- `middleware/`: 안증/로깅을 위한 미들웨어
-- `session/`: api에서 db/모델 사용을 위한 세션
-- `Dockerfile`: Docker 배포를 위한 Dockerfile
-- `main.py`: FastAPI main
-- `requirements.txt`: 패키지 정보
-- `schema.py`: api 요청/응답 스키마
+- `api/v1/`: Package implementing the REST API
+  - `endpoints/audio.py`: Implements APIs related to speech recognition
+  - `api.py`: Maps API functions to API routes using routers
+- `core/`: Core configuration for FastAPI
+  - `config.py`: Basic settings for FastAPI
+  - `logger.py`: Logs API request and response events
+- `ipa/`: Package for IPA conversion API
+- `middleware/`: Middleware for authentication and logging
+- `session/`: Session management for database/model access in API
+- `Dockerfile`: Dockerfile for containerized deployment
+- `main.py`: FastAPI application entry point
+- `requirements.txt`: List of required packages
+- `schema.py`: API request/response schemas
 
 
-## 환경 & 의존성
+## Environment & Dependencies
 
 ```text
 python>=3.11
@@ -77,7 +77,7 @@ aiosqlite==0.21.0
 ```
 
 
-## 기여
+## Contribution
 
-- 김준철 - 100%
-  - 모든 작업 진행
+- Joonchul Kim - 100%  
+  - Completed all development and implementation
