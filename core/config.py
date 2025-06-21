@@ -14,15 +14,6 @@ class Settings(BaseSettings):
     if not os.path.exists(LOG_DIR):
         os.makedirs(LOG_DIR, exist_ok=True)
 
-    MARIADB_HOST: str = os.getenv("MARIADB_HOST")
-    MARIADB_PORT: str = os.getenv("MARIADB_PORT")
-    MARIADB_USERNAME: str = os.getenv("MARIADB_USERNAME")
-    MARIADB_PASSWORD: str = os.getenv("MARIADB_PASSWORD")
-    MARIADB_DATABASE: str = os.getenv("MARIADB_DATABASE")
-
-    MARIADB_URL: str = (f'mariadb+pymysql://{MARIADB_USERNAME}:{MARIADB_PASSWORD}@{MARIADB_HOST}:{MARIADB_PORT}'
-                        f'/{MARIADB_DATABASE}?charset=utf8mb4')
-
     AUTH_KEY: str = os.getenv('AUTH_KEY')
     HUGGINGFACE_KEY: str = os.getenv('HUGGINGFACE_KEY')
     OLLAMA_KEY: str = os.getenv('OLLAMA_KEY')

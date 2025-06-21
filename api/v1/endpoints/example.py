@@ -3,6 +3,8 @@ from fastapi.responses import Response
 
 from sqlalchemy.orm import Session
 
+
+# FastAPI 테스트 api
 router = APIRouter()
 
 @router.get('/example')

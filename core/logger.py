@@ -3,8 +3,6 @@ from logging.handlers import RotatingFileHandler, SocketHandler
 
 from contextvars import ContextVar
 
-request_id_context: ContextVar[str] = ContextVar("request_id", default="-")
-
 from core.config import settings
 import json
 import traceback
@@ -12,6 +10,10 @@ import traceback
 from datetime import datetime
 
 
+# 각 요청에 고유한 ID를 부여하고, 로깅 시 이 값을 로그에 포함시키기 위한 ContextVar 선언
+request_id_context: ContextVar[str] = ContextVar("request_id", default="-")
+
+# 각 로그 레코드에 request_id를 삽입하는 필터 클래스 정의
 class RequestIdFilter(logging.Filter):
     def filter(self, record):
         try:
@@ -21,6 +23,7 @@ class RequestIdFilter(logging.Filter):
         return True
 
 
+# JSON 형식의 로그 출력을 위한 커스텀 Formatter
 class JSONFormatter(logging.Formatter):
     def formatTime(self, record, datefmt=None):
         if datefmt:
